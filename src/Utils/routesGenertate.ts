@@ -1,0 +1,24 @@
+import { TRoute, TUserPath } from '../Types';
+
+export const generateRoutes = (item: TUserPath[]) => {
+  const routes = item.reduce((acc: TRoute[], item) => {
+    if (item.path && item.element) {
+      acc.push({
+        path: item.path,
+        element: item.element,
+      });
+    }
+
+    if (item.children) {
+      item.children.forEach(child => {
+        acc.push({
+          path: child.path!,
+          element: child.element,
+        });
+      });
+    }
+
+    return acc;
+  }, [] as TRoute[]);
+  return routes;
+};

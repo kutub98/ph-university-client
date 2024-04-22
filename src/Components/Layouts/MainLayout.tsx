@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
-import {  Outlet } from 'react-router-dom';
-import { adminSideBars } from '../../Routes/admin.router';
+import { Button, Layout, theme } from 'antd';
+import { Outlet } from 'react-router-dom';
 
-const { Header, Sider, Content } = Layout;
+import SiderBar from './Sider';
+
+const { Header, Content } = Layout;
 
 // const Items = [
 //   {
@@ -63,19 +64,7 @@ const MainLayout: React.FC = () => {
         <Button>LOG OUT</Button>
       </div>
       <Layout>
-        <Sider
-          style={{ height: '100vh', position: 'static' }}
-          trigger={null}
-          collapsible
-          collapsed={collapsed}
-        >
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            items={adminSideBars}
-          />
-        </Sider>
+        <SiderBar collapsed={collapsed}/>
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>
             <Button
