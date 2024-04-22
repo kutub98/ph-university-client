@@ -1,38 +1,39 @@
 import React, { useState } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
-import { NavLink, Outlet } from 'react-router-dom';
+import {  Outlet } from 'react-router-dom';
+import { adminSideBars } from '../../Routes/admin.router';
 
 const { Header, Sider, Content } = Layout;
 
-const Items = [
-  {
-    key: 'dashboard',
-    label: <NavLink to="/admin/dashboard">Dashobard</NavLink>,
-  },
-  {
-    key: '2',
-    label: 'Profile',
-  },
-  {
-    key: 'usermanagement',
-    label: 'User Mangement',
-    children: [
-      {
-        key: 'create admin',
-        label: <NavLink to="/admin/create-admin">Create Admin</NavLink>,
-      },
-      {
-        key: 'Create faculty',
-        label: <NavLink to="/admin/create-faculty">Create faculty</NavLink>,
-      },
-      {
-        key: 'Create student',
-        label: <NavLink to="/admin/create-student">Create Student</NavLink>,
-      },
-    ],
-  },
-];
+// const Items = [
+//   {
+//     key: 'dashboard',
+//     label: <NavLink to="/admin/dashboard">Dashobard</NavLink>,
+//   },
+//   {
+//     key: '2',
+//     label: 'Profile',
+//   },
+//   {
+//     key: 'usermanagement',
+//     label: 'User Mangement',
+//     children: [
+//       {
+//         key: 'create admin',
+//         label: <NavLink to="/admin/create-admin">Create Admin</NavLink>,
+//       },
+//       {
+//         key: 'Create faculty',
+//         label: <NavLink to="/admin/create-faculty">Create faculty</NavLink>,
+//       },
+//       {
+//         key: 'Create student',
+//         label: <NavLink to="/admin/create-student">Create Student</NavLink>,
+//       },
+//     ],
+//   },
+// ];
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -72,7 +73,7 @@ const MainLayout: React.FC = () => {
             theme="dark"
             mode="inline"
             defaultSelectedKeys={['1']}
-            items={Items}
+            items={adminSideBars}
           />
         </Sider>
         <Layout>
