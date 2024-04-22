@@ -1,39 +1,34 @@
-import React, { Children, useState } from 'react';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
+import React, { useState } from 'react';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Button, Layout, Menu, theme } from 'antd';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
 const Items = [
   {
-    key: '1',
-    label: 'Profile',
+    key: 'dashboard',
+    label: <NavLink to="/admin/dashboard">Dashobard</NavLink>,
   },
   {
     key: '2',
-    label: 'User',
+    label: 'Profile',
   },
   {
-    key: '3',
-    label: 'Create user',
+    key: 'usermanagement',
+    label: 'User Mangement',
     children: [
       {
-        key: '1.1',
-        label: 'Create Admin',
+        key: 'create admin',
+        label: <NavLink to="/admin/create-admin">Create Admin</NavLink>,
       },
       {
-        key: '1.2',
-        label: 'Create Faculty',
+        key: 'Create faculty',
+        label: <NavLink to="/admin/create-faculty">Create faculty</NavLink>,
       },
       {
-        key: '1.3',
-        label: 'Create User',
+        key: 'Create student',
+        label: <NavLink to="/admin/create-student">Create Student</NavLink>,
       },
     ],
   },
@@ -50,7 +45,7 @@ const MainLayout: React.FC = () => {
         className=""
         style={{
           width: '98%',
-          margin:"auto",
+          margin: 'auto',
           background: 'rgb(19, 1, 60)',
           display: 'flex',
           justifyContent: 'space-between',
@@ -102,7 +97,7 @@ const MainLayout: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            Content
+            <Outlet />
           </Content>
         </Layout>
       </Layout>
