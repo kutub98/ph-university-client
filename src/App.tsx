@@ -1,7 +1,12 @@
 import MainLayout from './Components/Layouts/MainLayout';
+import ProtectedLayout from './Components/Layouts/ProtectedLayout';
 
 function App() {
-  return <MainLayout />;
+  return (
+    <ProtectedLayout>
+      <MainLayout />
+    </ProtectedLayout>
+  );
 }
 
 export default App;
