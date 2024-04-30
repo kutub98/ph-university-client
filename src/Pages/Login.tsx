@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from 'antd';
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useLoginMutation } from '../Redux/auth/authApi';
 import { useAppDispatch } from '../Redux/Hooks';
-import { setUser } from '../Redux/auth/authSlice';
+import { setUser, TUser } from '../Redux/auth/authSlice';
 import { VerifyToken } from '../Utils/verifyToken';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const Login = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       id: 'A-0001',
@@ -15,16 +18,29 @@ const Login = () => {
     },
   });
   const [login] = useLoginMutation();
-  const onSubmit = async (userData) => {
-    const userInfor = {
-      id: userData.id,
-      password: userData.password,
-    };
+  // const toastId = toast.loading('loading');
+  const onSubmit = async (userData: FieldValues) => {
+    try {
+      const userInfor = {
+        id: userData.id,
+        password: userData.password,
+      };
 
-    const res = await login(userInfor).unwrap();
-    const user = VerifyToken(res.data.accessToken);
-    const result = dispatch(setUser({ user: { user }, token: res.data.accessToken }));
-    console.log(result)
+      const res = await login(userInfor).unwrap();
+      const user = VerifyToken(res.data.accessToken) as TUser;
+      const result = dispatch(
+        setUser({ user: { user }, token: res.data.accessToken }),
+      );
+      navigate(`/${user.role}/dashboard`);
+      toast.success(
+        // <h1 style={{ background: 'green', color: 'white' }}>
+        'Successfully loggedIn',
+        // </h1>,
+      );
+      console.log(result.payload);
+    } catch (err) {
+      toast.error('something went wrong !');
+    }
   };
   return (
     <div>

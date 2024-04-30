@@ -28,6 +28,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: generateRoutes(adminPath),
   },
+
   {
     path: '/student',
     element: <App />,

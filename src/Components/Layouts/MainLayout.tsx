@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Button, Layout, theme } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import SiderBar from './Sider';
+import { useAppDispatch } from '../../Redux/Hooks';
+import { logOut } from '../../Redux/auth/authSlice';
 
 const { Header, Content } = Layout;
 
@@ -37,9 +39,17 @@ const { Header, Content } = Layout;
 // ];
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const dispatch = useAppDispatch();
+
+  const signOut = () => {
+    dispatch(logOut());
+    navigate('/');
+  };
 
   return (
     <>
@@ -61,10 +71,10 @@ const MainLayout: React.FC = () => {
         }}
       >
         <h1>PH-UNIVERSITY</h1>
-        <Button>LOG OUT</Button>
+        <Button onClick={signOut}>LOG OUT</Button>
       </div>
       <Layout>
-        <SiderBar collapsed={collapsed}/>
+        <SiderBar collapsed={collapsed} />
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>
             <Button
