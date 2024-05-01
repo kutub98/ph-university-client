@@ -1,50 +1,47 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from 'antd';
-import { FieldValues, useForm } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
 import { useLoginMutation } from '../Redux/auth/authApi';
 import { useAppDispatch } from '../Redux/Hooks';
 import { setUser, TUser } from '../Redux/auth/authSlice';
 import { VerifyToken } from '../Utils/verifyToken';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import PhForm from '../Components/Form/PhForm';
+import PhFormInput from '../Components/Form/PhFormInput';
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      id: 'A-0001',
-      password: 'admin13',
-    },
-  });
   const [login] = useLoginMutation();
-  // const toastId = toast.loading('loading');
   const onSubmit = async (userData: FieldValues) => {
     try {
       const userInfor = {
-        id: userData.id,
+        id: userData.userId,
         password: userData.password,
       };
 
       const res = await login(userInfor).unwrap();
+
       const user = VerifyToken(res.data.accessToken) as TUser;
-      const result = dispatch(
-        setUser({ user: { user }, token: res.data.accessToken }),
-      );
+      dispatch(setUser({ user: { user }, token: res.data.accessToken }));
       navigate(`/${user.role}/dashboard`);
-      toast.success(
-        // <h1 style={{ background: 'green', color: 'white' }}>
-        'Successfully loggedIn',
-        // </h1>,
-      );
-      console.log(result.payload);
+      toast.success('Successfully loggedIn');
     } catch (err) {
       toast.error('something went wrong !');
     }
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <div
+      style={{
+        height: '100vh',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '300px',
+        margin: 'auto',
+      }}
+    >
+      <PhForm onSubmit={onSubmit}>
         <div>
           <img
             style={{ height: '200px', width: '200px' }}
@@ -52,18 +49,13 @@ const Login = () => {
             alt=""
           />
         </div>
-        <div>
-          <label htmlFor="id">ID</label>
-          <input type="text" id="id" {...register('id')} />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="text" id="passwrod" {...register('password')} />
-        </div>
-        <div>
-          <Button htmlType="submit">Submit</Button>
-        </div>
-      </form>
+
+        <PhFormInput type="text" name="userId" label="Id" />
+
+        <PhFormInput type="text" name="password" label="Password" />
+
+        <Button htmlType="submit">Submit</Button>
+      </PhForm>
     </div>
   );
 };
