@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from 'antd';
+
 import { FieldValues } from 'react-hook-form';
 import { useLoginMutation } from '../Redux/auth/authApi';
 import { useAppDispatch } from '../Redux/Hooks';
 import { setUser, TUser } from '../Redux/auth/authSlice';
 import { VerifyToken } from '../Utils/verifyToken';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import PhForm from '../Components/Form/PhForm';
 import PhFormInput from '../Components/Form/PhFormInput';
+import Container from '../Components/ui/Container';
+import { Button } from 'antd';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -41,25 +43,98 @@ const Login = () => {
         height: '100vh',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '300px',
-        margin: 'auto',
+        width: '100%',
       }}
     >
-      <PhForm onSubmit={onSubmit} defaultValues={defaultValues}>
-        <div>
-          <img
-            style={{ height: '200px', width: '200px' }}
-            src="../assets/undraw_coding_re_iv62.svg"
-            alt=""
-          />
+      <Container>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: '#01204E',
+            padding: '10px 50px',
+            height: '60px',
+            justifyContent: ' space-between',
+          }}
+        >
+          <Link
+            style={{
+              color: 'white',
+              listStyle: 'none',
+              textDecoration: 'none',
+              fontSize: '20px',
+              fontWeight: '500',
+            }}
+            to="/login"
+          >
+            Home
+          </Link>
+          <Link
+            style={{
+              color: 'white',
+              listStyle: 'none',
+              textDecoration: 'none',
+              fontSize: '20px',
+              fontWeight: '500',
+            }}
+            to="/"
+          >
+            Login
+          </Link>
         </div>
+        <div
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            display: 'flex',
+            background: '#F6DCAC',
+            height: '90vh',
+            margin: 'auto',
+          }}
+        >
+          <PhForm
+            style={{
+              width: '500px',
+              padding: '20px',
+              color: 'white',
+              borderRadius: '8px',
+              background: '#028391',
 
-        <PhFormInput type="text" name="userId" label="Id" />
+              boxShadow:
+                ' rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+            }}
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+          >
+            <div
+              style={{
+                width: '100%',
+                display: 'block',
+                margin: '0 auto',
+                textAlign: 'center',
+                color: 'white',
+              }}
+            >
+              <img
+                style={{
+                  height: '100px',
+                  width: '100px',
+                }}
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLE5jeVKhxvxiM7Hxn1iw3z-hKBTcICQUb7kNYtZTlXw&s"
+                alt=""
+              />
+              <h2 style={{ color: 'white' }}>Login to PH University</h2>
+            </div>
 
-        <PhFormInput type="text" name="password" label="Password" />
+            <PhFormInput type="text" name="userId" label="Id" />
 
-        <Button htmlType="submit">Submit</Button>
-      </PhForm>
+            <PhFormInput type="text" name="password" label="Password" />
+
+            <Button htmlType="submit">Submit</Button>
+          </PhForm>
+        </div>
+      </Container>
     </div>
   );
 };

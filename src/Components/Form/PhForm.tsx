@@ -13,16 +13,17 @@ export type TFormConfig = {
 export type TFormPorps = {
   children: ReactNode;
   onSubmit: SubmitHandler<FieldValues>;
+  style?: React.CSSProperties;
 } & TFormConfig;
 
-const PhForm = ({ onSubmit, children, defaultValues }: TFormPorps) => {
+const PhForm = ({ onSubmit, children, defaultValues, style }: TFormPorps) => {
   const formConfig: TFormConfig = {};
   if (defaultValues) {
     formConfig['defaultValues'] = defaultValues;
   }
   const methods = useForm(formConfig);
   return (
-    <div>
+    <div style={{ ...style }}>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
       </FormProvider>
