@@ -14,6 +14,10 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [login] = useLoginMutation();
+  const defaultValues = {
+    userId: 'A-0001',
+    password: 'admin13',
+  };
   const onSubmit = async (userData: FieldValues) => {
     try {
       const userInfor = {
@@ -41,7 +45,7 @@ const Login = () => {
         margin: 'auto',
       }}
     >
-      <PhForm onSubmit={onSubmit}>
+      <PhForm onSubmit={onSubmit} defaultValues={defaultValues}>
         <div>
           <img
             style={{ height: '200px', width: '200px' }}
