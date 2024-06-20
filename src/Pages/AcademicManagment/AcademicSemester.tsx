@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useGetAllAcademicSemesterQuery } from '../../Redux/Featurs/academicSemesterApi';
 
 const AcademicSemester = () => {

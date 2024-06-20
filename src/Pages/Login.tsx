@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { FieldValues } from 'react-hook-form';
+import React, { useState } from 'react';
+import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useLoginMutation } from '../Redux/auth/authApi';
 import { useAppDispatch } from '../Redux/Hooks';
 import { setUser, TUser } from '../Redux/auth/authSlice';
 import { VerifyToken } from '../Utils/verifyToken';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import PhForm from '../Components/Form/PhForm';
 import PhFormInput from '../Components/Form/PhFormInput';
@@ -16,10 +15,22 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [login] = useLoginMutation();
-  const defaultValues = {
-    userId: 'A-0001',
-    password: 'admin13',
+  const { control, handleSubmit, watch } = useForm({
+    defaultValues: {
+      userId: '',
+      password: '',
+    },
+  });
+
+  const userId = watch('userId');
+  const password = watch('password');
+  const [isValid, setIsValid] = useState(false);
+  const [buttonStyle, setButtonStyle] = useState({ top: '0', left: '0' });
+
+  const validateInputs = (userId: string, password: string) => {
+    return userId === 'A-0001' && password === 'admin13';
   };
+
   const onSubmit = async (userData: FieldValues) => {
     try {
       const userInfor = {
@@ -32,11 +43,29 @@ const Login = () => {
       const user = VerifyToken(res.data.accessToken) as TUser;
       dispatch(setUser({ user: { user }, token: res.data.accessToken }));
       navigate(`/${user.role}/dashboard`);
-      toast.success('Successfully loggedIn');
+      toast.success('Successfully logged in');
     } catch (err) {
       toast.error('something went wrong !');
     }
   };
+
+  React.useEffect(() => {
+    const valid = validateInputs(userId, password);
+    setIsValid(valid);
+    if (valid) {
+      setButtonStyle({ top: '0', left: '0' });
+    }
+  }, [userId, password]);
+
+  const handleMouseOver = () => {
+    if (!isValid) {
+      setButtonStyle({
+        top: `${Math.random() * 150 - 125}px`,
+        left: `${Math.random() * 450 - 125}px`,
+      });
+    }
+  };
+
   return (
     <div
       style={{
@@ -47,41 +76,6 @@ const Login = () => {
       }}
     >
       <Container>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: '#01204E',
-            padding: '10px 50px',
-            height: '60px',
-            justifyContent: ' space-between',
-          }}
-        >
-          <Link
-            style={{
-              color: 'white',
-              listStyle: 'none',
-              textDecoration: 'none',
-              fontSize: '20px',
-              fontWeight: '500',
-            }}
-            to="/login"
-          >
-            Home
-          </Link>
-          <Link
-            style={{
-              color: 'white',
-              listStyle: 'none',
-              textDecoration: 'none',
-              fontSize: '20px',
-              fontWeight: '500',
-            }}
-            to="/"
-          >
-            Login
-          </Link>
-        </div>
         <div
           style={{
             justifyContent: 'center',
@@ -102,10 +96,9 @@ const Login = () => {
               background: '#028391',
 
               boxShadow:
-                ' rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+                'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
             }}
-            onSubmit={onSubmit}
-            defaultValues={defaultValues}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div
               style={{
@@ -127,11 +120,52 @@ const Login = () => {
               <h2 style={{ color: 'white' }}>Login to PH University</h2>
             </div>
 
-            <PhFormInput type="text" name="userId" label="Id" />
+            <Controller
+              name="userId"
+              control={control}
+              render={({ field }) => (
+                <PhFormInput
+                  {...field}
+                  label="Id"
+                  onChange={e => {
+                    field.onChange(e);
+                    setUserId(e.target.value);
+                  }}
+                />
+              )}
+            />
 
-            <PhFormInput type="text" name="password" label="Password" />
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <PhFormInput
+                  {...field}
+                  type="password"
+                  label="Password"
+                  onChange={e => {
+                    field.onChange(e);
+                    setPassword(e.target.value);
+                  }}
+                />
+              )}
+            />
 
-            <Button htmlType="submit">Submit</Button>
+            <Button
+              htmlType="submit"
+              style={{
+                backgroundColor: isValid ? '#F6DCAC' : '#FC0000',
+                color: isValid ? '#028391' : '#545050',
+                position: 'relative',
+                top: buttonStyle.top,
+                left: buttonStyle.left,
+                transition: 'top 0.1s, left 0.1s',
+              }}
+              onMouseOver={handleMouseOver}
+              disabled={!isValid}
+            >
+              {isValid ? 'Submit Now' : ' Incorrect'}
+            </Button>
           </PhForm>
         </div>
       </Container>
